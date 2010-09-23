@@ -1,0 +1,9 @@
+html
+  head
+    title My TODO list application
+  body
+    h1 Welcome to my TODO list
+    div.active
+      != realtime('connections.jade' {repaint: 'connections', value: connections })
+    div.items
+      != realtime('items.jade', {append: 'item.new', repaint: 'item.edit.', remove: 'item.delete.', value: items })
