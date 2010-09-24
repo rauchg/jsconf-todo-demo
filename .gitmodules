@@ -7,3 +7,6 @@
 [submodule "support/socket.io"]
 	path = support/socket.io
 	url = git://github.com/LearnBoost/Socket.IO-node.git
+[submodule "support/jade"]
+	path = support/jade
+	url = git://github.com/visionmedia/jade.git
