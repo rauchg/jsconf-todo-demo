@@ -66,6 +66,14 @@ app.get('/', function(req, res){
   
 });
 
+app.get('/edit/:id', function(req, res, params){
+  
+  db.model('Item').findById(params.id, function(item){
+    res.render('edit.jade', {locals: {item: item}, layout: false});
+  });
+  
+});
+
 app.post('/edit', function(req, res){
   
   db.model('Item').findById(req.body.id, function(item){

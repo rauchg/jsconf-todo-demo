@@ -10,15 +10,14 @@ html
     #wrap
       h1 Welcome to my TODO list
       .items
-        .item
-          h2 Some item title
-          a.edit(href: '#') Edit
-          .date 30/5 5:00 PM
-          .description
-            p Item description
-        .item
-          h2 Another todo
-          a.edit(href: '#') Edit
-          .date 30/5 5:00 PM
-          .description
-            p Yep yep yep
+        - if (items.length)
+          - items.forEach(function(item){
+          .item
+            h2= item.name
+            a.edit(href: '/edit/' + item.id) Edit
+            .date= item.date.
+            .description
+              p= item.description_formatted
+          - })
+        - else
+          p No items to show

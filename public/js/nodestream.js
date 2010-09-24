@@ -46,6 +46,7 @@
     },
     
     append: function(id, html, top){
+      $('#' + id + ' .placeholder').remove();
       if (top){
         $('#' + id).prepend(html);
       } else {
