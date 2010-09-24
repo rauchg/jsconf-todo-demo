@@ -1,9 +1,24 @@
 html
   head
     title My TODO list application
+    link(rel: 'stylesheet', href: '/css/main.css')
+    script(src: '/socket.io/socket.io.js')
+    script(src: '/js/jquery.js')
+    script(src: '/js/nodestream.js')
+    script(src: '/js/main.js')
   body
-    h1 Welcome to my TODO list
-    div.active
-      != realtime('connections.jade' {repaint: 'connections', value: connections })
-    div.items
-      != realtime('items.jade', {append: 'item.new', repaint: 'item.edit.', remove: 'item.delete.', value: items })
+    #wrap
+      h1 Welcome to my TODO list
+      .items
+        .item
+          h2 Some item title
+          a.edit(href: '#') Edit
+          .date 30/5 5:00 PM
+          .description
+            p Item description
+        .item
+          h2 Another todo
+          a.edit(href: '#') Edit
+          .date 30/5 5:00 PM
+          .description
+            p Yep yep yep

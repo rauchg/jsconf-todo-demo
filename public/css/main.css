@@ -1,0 +1,69 @@
+body {
+  background: url('/images/background.png');
+  padding: 20px;
+}
+
+h1 {
+  font: 22px Georgia;
+  color: #000;
+  text-shadow: 0 -1px 0 #fff;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#wrap {
+  max-width: 500px;
+  margin: auto;
+}
+
+.item {
+  border: 1px solid #7b7b7b;
+  -webkit-box-shadow: 0 0 8px rgba(0,0,0,0.20);
+  -moz-box-shadow: 0 0 8px rgba(0,0,0,0.20);
+  box-shadow: 0 0 8px rgba(0,0,0,0.20);
+  background: url('/images/square.png');
+  margin-bottom: 20px;
+  padding: 0 20px;
+  position: relative;
+}
+
+.item a.edit {
+  width: 20px;
+  height: 20px;
+  background: url('/images/pencil.png') center no-repeat;
+  display: none;
+  text-indent: -5000px;
+  position: relative;
+  top: -2px;
+  margin: 0 0 0 10px;
+}
+
+.item a.edit:hover {
+  background-color: #ccc;
+}
+
+.item:hover a.edit {
+  display: inline-block;
+}
+
+.item h2 {
+  display: inline-block;
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 3px 5px;
+  font: bold 14px Helvetica;
+  text-shadow: 0 1px 0 #fff;
+  margin-bottom: 0;
+}
+
+.item .date {
+  font: 16px Georgia;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  color: #666;
+}
+
+.item .description {
+  font: 15px Georgia;
+}

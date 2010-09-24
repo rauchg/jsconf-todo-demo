@@ -1,22 +1,32 @@
+// some paths 
 require.paths.unshift(__dirname + '/support/express/lib/',
+                      __dirname + '/support/express/support/connect/lib',
                       __dirname + '/support/socket.io/lib/',
+                      __dirname + '/support/nodestream/lib/',
                       __dirname + '/support/mongoose/',
-                      __dirname + '/support/nodestream',
                       __dirname + '/support/express/support/jade/lib/');
 
+// requires
 var express = require('express'),
     mongoose = require('mongoose').Mongoose,
     db = mongoose.connect('mongodb://localhost/todo'),
     io = require('socket.io'),
     nodestream = require('nodestream');
 
+// model
 mongoose.model('Item', {
   
-  properties: ['title', 'description'],
+  properties: ['title', 'description', 'due', ['tags']],
+  
+  cast: { due: Date },
   
   getters: {
     id: function(){
       return this._id.toHexString();
+    },
+    
+    description_formatted: function(v){
+      return '<p>' + v.replace(/\n/g, '</p><p>') + '</p>';
     }
   },
   
@@ -32,24 +42,26 @@ mongoose.model('Item', {
     },
     
     remove: function(){
-      if (!this.isNew) nodestream.emit('item.delete.' + this.id, this);
+      if (!this.isNew) nodestream.emit('item.remove.' + this.id, this);
       return this.__super__();
     }
     
   }
   
 });
-    
+
+// app initialization
 var app = express.createServer(
   express.staticProvider(__dirname + '/public'),
   express.cookieDecoder(),
   express.session()
 );
 
+// routes
 app.get('/', function(req, res){
   
-  db.model('Item').find(function(items){
-    res.render('index.jade', {locals: {items: items, connections: connections}})
+  db.model('Item').find({}).all(function(items){
+    res.render('index.jade', {locals: {items: items, connections: connections}, layout: false});
   });
   
 });
@@ -76,10 +88,11 @@ app.get('/delete/:id', function(req, res, params){
   
 });
 
-app.listen(80).nodestream();
+app.listen(80);
 
-var sio = io.listen(app),
-    connections = 0;
+// socket.io
+var sio = io.listen(app).nodestream();
+var connections = 0;
 
 sio.on('connection', function(c){
   nodestream.emit('connections', ++connections);
@@ -88,5 +101,3 @@ sio.on('connection', function(c){
     nodestream.emit('connections', --connections);
   });
 });
-
-nodestream(sio);
