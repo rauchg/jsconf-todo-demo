@@ -31,6 +31,20 @@ Two areas are made realtime (a counter of active users and the todo list itself)
 
 - Indicate what pieces of content are realtime in the template language and to what events they're bound.
 
+## How to run
+
+1. Install MongoDB 
+2. Clone the repository (recursively!)
+
+	git clone git://github.com/guille/jsconf-todo-demo.git --recursive
+
+3. Run it
+
+	cd jsconf-todo-demo
+	sudo node run.js
+
+And point your browser to `http://localhost`
+
 ## Credits
 
 Guillermo Rauch &lt;guillermo@learnboost.com&gt; ([guille](http://github.com/guille))
