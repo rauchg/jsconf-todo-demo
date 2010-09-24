@@ -1,17 +1,8 @@
-// some paths 
-require.paths.unshift(__dirname + '/support/express/lib/',
-                      __dirname + '/support/express/support/connect/lib',
-                      __dirname + '/support/socket.io/lib/',
-                      __dirname + '/support/nodestream/lib/',
-                      __dirname + '/support/mongoose/',
-                      __dirname + '/support/express/support/jade/lib/');
-
 // requires
 var express = require('express'),
     mongoose = require('mongoose').Mongoose,
     db = mongoose.connect('mongodb://localhost/todo'),
-    io = require('socket.io'),
-    nodestream = require('nodestream');
+    io = require('socket.io');
 
 // model
 mongoose.model('Item', {
@@ -26,24 +17,6 @@ mongoose.model('Item', {
     description_formatted: function(v){
       return this.description ? '<p>' + this.description.replace(/\n/g, '</p><p>') + '</p>' : '';
     }
-  },
-  
-  methods: {
-    
-    save: function(fn){
-      if (this.isNew){
-        nodestream.emit('item.new', this);
-      } else {
-        nodestream.emit('item.edit.' + this.id, this);
-      }
-      return this.__super__(fn);
-    },
-    
-    remove: function(fn){
-      if (!this.isNew) nodestream.emit('item.remove.' + this.id, this);
-      return this.__super__(fn);
-    }
-    
   }
   
 });
@@ -64,7 +37,7 @@ app.configure(function(){
 app.get('/', function(req, res){
   
   Item.find({}).sort([['_id', -1]]).all(function(items){
-    res.render('index.jade', {locals: {items: items, connections: connections}, layout: false});
+    res.render('index.jade', {locals: {items: items}, layout: false});
   });
   
 });
@@ -111,15 +84,3 @@ app.get('/delete/:id', function(req, res){
 });
 
 app.listen(80);
-
-// socket.io
-var sio = io.listen(app).nodestream();
-var connections = 0;
-
-sio.on('connection', function(c){
-  nodestream.emit('connections', ++connections);
-  
-  c.on('disconnect', function(){
-    nodestream.emit('connections', --connections);
-  });
-});
