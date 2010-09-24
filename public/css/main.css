@@ -16,6 +16,10 @@ h1 {
   margin: auto;
 }
 
+.items {
+  margin-top: 20px;
+}
+
 .item {
   border: 1px solid #7b7b7b;
   -webkit-box-shadow: 0 0 8px rgba(0,0,0,0.20);
@@ -38,11 +42,22 @@ h1 {
   margin: 0 0 0 10px;
 }
 
-.item a.edit:hover {
-  background-color: #ccc;
+.item a.remove {
+  width: 20px;
+  height: 20px;
+  background: url('/images/remove.png') center no-repeat;
+  display: none;
+  text-indent: -5000px;
+  position: relative;
+  top: -2px;
+  margin: 0 0 0 10px;
 }
 
-.item:hover a.edit {
+.item a.edit:hover, .item a.remove:hover {
+  background-color: #eee;
+}
+
+.item:hover a.edit, .item:hover a.remove {
   display: inline-block;
 }
 
@@ -62,6 +77,7 @@ h1 {
   top: 15px;
   right: 20px;
   color: #666;
+  text-transform: lowercase;
 }
 
 .item .description {
@@ -69,5 +85,87 @@ h1 {
 }
 
 .item-edit {
-  background: rgba(0,0,0,.3);
+  background: rgba(0,0,0,.8);
+  border-width: 0;
+  -webkit-box-shadow: 0 0 0 rgba(0,0,0,.0);
+  -moz-box-shadow: 0 0 0 rgba(0,0,0,.0);
+  box-shadow: 0 0 0 rgba(0,0,0,.0);
+  position: absolute;
+}
+
+.item-edit h2 {
+  background: transparent;
+  border-color: transparent;
+  padding: 0;
+  margin: 10px 0 5px;
+}
+
+.item-edit input[type=text], .item-edit textarea {
+  border: 0;
+  padding: 5px;
+  background: #fff;
+  margin: 0;
+}
+
+.item-edit .buttons {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.item-edit .buttons a {
+  color: #eee;
+  font: 11px Lucida Grande, Verdana;
+  text-decoration: none;
+}
+
+.item-edit textarea {
+  width: 300px;
+}
+
+.add {
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+}
+
+.add .wrap {
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding: 10px;
+  background: rgba(255,255,255,.4);
+}
+
+.add fieldset, .add form {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.add legend {
+  padding: 0;
+  font: bold 13px Lucida Grande, Verdana;
+  text-transform: uppercase;
+}
+
+.add p {
+  display: inline-block;
+  width: 150px;
+  font: 11px Lucida Grande, Verdana;
+  vertical-align: top;
+}
+
+.add .submit {
+  text-align: right;
+}
+
+.add fieldset input, .add fieldset textarea {
+  border: 0;
+  background: #fff;
+  padding: 8px;
+  width: 200px;
+}
+
+.placeholder .wrap {
+  font: bold 13px Helvetica, Arial;
+  padding: 10px 0;
 }

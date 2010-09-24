@@ -9,15 +9,29 @@ html
   body
     #wrap
       h1 Welcome to my TODO list
+      .add
+        .wrap
+          form(method: 'post', action: '/add')
+            fieldset
+              legend Add new item
+              p Title
+              input(name: 'title', placeholder: 'Title')
+              p When
+              input(name: 'due', placeholder: 'in 3 days')
+              p Description
+              textarea(name: 'description', placeholder: 'Description')
+            .submit
+              input(type: 'submit', value: 'Send')
       .items
         - if (items.length)
           - items.forEach(function(item){
           .item
-            h2= item.name
+            h2= item.title || ''
             a.edit(href: '/edit/' + item.id) Edit
-            .date= item.date.
-            .description
-              p= item.description_formatted
+            a.remove(href: '/delete/' + item.id) Remove
+            .date= item.due || ''
+            .description!= item.description_formatted
           - })
         - else
-          p No items to show
+          .placeholder
+            .wrap No items to show

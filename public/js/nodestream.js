@@ -48,9 +48,9 @@
     append: function(id, html, top){
       $('#' + id + ' .placeholder').remove();
       if (top){
-        $('#' + id).prepend(html);
+        $('#' + id).prepend(html).children(':first').animate({'background-color': '#ffff88'}, 500);
       } else {
-        $('#' + id).append(html);
+        $('#' + id).append(html).children(':last').animate({'background-color': '#ffff88'}, 500);
       }
     }
     

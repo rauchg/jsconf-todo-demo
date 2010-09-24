@@ -18,32 +18,30 @@ mongoose.model('Item', {
   
   properties: ['title', 'description', 'due', ['tags']],
   
-  cast: { due: Date },
-  
   getters: {
     id: function(){
       return this._id.toHexString();
     },
     
     description_formatted: function(v){
-      return '<p>' + v.replace(/\n/g, '</p><p>') + '</p>';
+      return this.description ? '<p>' + this.description.replace(/\n/g, '</p><p>') + '</p>' : '';
     }
   },
   
   methods: {
     
-    save: function(){
+    save: function(fn){
       if (this.isNew){
         nodestream.emit('item.new', this);
       } else {
         nodestream.emit('item.edit.' + this.id, this);
       }
-      return this.__super__();
+      return this.__super__(fn);
     },
     
-    remove: function(){
+    remove: function(fn){
       if (!this.isNew) nodestream.emit('item.remove.' + this.id, this);
-      return this.__super__();
+      return this.__super__(fn);
     }
     
   }
@@ -53,44 +51,60 @@ mongoose.model('Item', {
 // app initialization
 var app = express.createServer(
   express.staticProvider(__dirname + '/public'),
+  express.bodyDecoder(),
   express.cookieDecoder(),
   express.session()
 );
 
+app.configure(function(){
+  Item = db.model('Item');
+});
+
 // routes
 app.get('/', function(req, res){
   
-  db.model('Item').find({}).all(function(items){
+  Item.find({}).sort([['_id', -1]]).all(function(items){
     res.render('index.jade', {locals: {items: items, connections: connections}, layout: false});
   });
   
 });
 
-app.get('/edit/:id', function(req, res, params){
+app.get('/edit/:id', function(req, res){
   
-  db.model('Item').findById(params.id, function(item){
+  Item.findById(req.param('id'), function(item){
     res.render('edit.jade', {locals: {item: item}, layout: false});
   });
   
 });
 
-app.post('/edit', function(req, res){
+app.post('/edit/:id', function(req, res){
   
-  db.model('Item').findById(req.body.id, function(item){
+  Item.findById(req.param('id'), function(item){
     item.title = req.body.title;
+    item.due = req.body.due;
     item.description = req.body.description;
     item.save(function(){
-      res.send(200);
+      res.redirect('/');
     });
   });
   
 });
 
-app.get('/delete/:id', function(req, res, params){
+app.post('/add', function(req, res){
   
-  db.model('Item').findById(params.id, function(item){
+  var item = new Item();
+  item.merge(req.body);
+  item.save(function(){
+    res.redirect('/');
+  });
+  
+});
+
+app.get('/delete/:id', function(req, res){
+  
+  Item.findById(req.param('id'), function(item){
     item.remove(function(){
-      res.send(200);
+      res.redirect('/');
     });
   });
   
