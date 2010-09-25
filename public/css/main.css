@@ -175,7 +175,7 @@ div.item:hover a.edit, div.item:hover a.remove {
 .add fieldset input, .add fieldset textarea {
   border: 0;
   background: #fff;
-  padding: 8px;
+  padding: 5px 8px;
   width: 200px;
 }
 
