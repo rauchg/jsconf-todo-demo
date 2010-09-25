@@ -5,7 +5,7 @@ JSConf.eu Socket.IO+Nodestream TODO Application Demo
 
 This application was written for my JSConf.eu 2010 presentation. 
 
-Up until [f5a75ab](https://github.com/guille/jsconf-todo-demo/tree/f5a75abad5e730e35495f09612133c20d67cdd24) it's a simple application powered by:
+Up until [6da2576](https://github.com/guille/jsconf-todo-demo/tree/6da25769f2fcb4d5c0d88d5f558b6dc998a2cecc) it's a simple application powered by:
 
 - [Express](http://github.com/visionmedia/express) (web framework)
 
