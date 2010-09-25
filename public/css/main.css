@@ -16,6 +16,20 @@ h1 {
   margin: auto;
 }
 
+.connections {
+  background: rgba(255,255,255,.4);
+  font: 11px Lucida Grande, Verdana;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+.connections p {
+  margin: 0;
+}
+
 .items {
   margin-top: 20px;
 }
