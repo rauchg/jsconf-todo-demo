@@ -11,7 +11,7 @@ html
       h1 Welcome to my TODO list
       .add
         .wrap
-          form(method: 'post', action: '/add')
+          form.ajax(method: 'post', action: '/add')
             fieldset
               legend Add new item
               p Title
@@ -23,15 +23,12 @@ html
             .submit
               input(type: 'submit', value: 'Send')
       .items
-        - if (items.length)
-          - items.forEach(function(item){
+        :realtime(append: 'item.new', repaint: 'item.edit.', remove: 'item.remove.', local: 'items', obj: 'item')
           .item
             h2= item.title || ''
-            a.edit(href: '/edit/' + item.id) Edit
-            a.remove(href: '/delete/' + item.id) Remove
+            a.ajax.edit(href: '/edit/' + item.id) Edit
+            a.ajax.remove(href: '/delete/' + item.id) Remove
             .date= item.due || ''
             .description!= item.description_formatted
-          - })
-        - else
-          .placeholder
+          placeholder
             .wrap No items to show

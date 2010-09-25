@@ -1,5 +1,5 @@
 .item.item-edit
-  form(action: '/edit/' + item.id, method: 'post')
+  form.ajax(action: '/edit/' + item.id, method: 'post')
     h2
       input(type: 'text', name: 'title', value: item.title || '')
     .date

@@ -2,7 +2,8 @@
 var express = require('express'),
     mongoose = require('mongoose').Mongoose,
     db = mongoose.connect('mongodb://localhost/todo'),
-    io = require('socket.io');
+    io = require('socket.io'),
+    node = require('nodestream');
 
 // model
 mongoose.model('Item', {
@@ -57,7 +58,8 @@ app.post('/edit/:id', function(req, res){
     item.due = req.body.due;
     item.description = req.body.description;
     item.save(function(){
-      res.redirect('/');
+      nodestream.emit('item.edit.' + item.id, item);
+      res.send(200);
     });
   });
   
@@ -68,7 +70,8 @@ app.post('/add', function(req, res){
   var item = new Item();
   item.merge(req.body);
   item.save(function(){
-    res.redirect('/');
+    nodestream.emit('item.new', item);
+    res.send(200);
   });
   
 });
@@ -77,10 +80,13 @@ app.get('/delete/:id', function(req, res){
   
   Item.findById(req.param('id'), function(item){
     item.remove(function(){
-      res.redirect('/');
+      nodestream.emit('item.remove.' + item.id);
+      res.send(200);
     });
   });
   
 });
 
 app.listen(80);
+
+nodestream = io.listen(app).nodestream();
