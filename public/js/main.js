@@ -34,6 +34,7 @@
   $('form.ajax').live('submit', function(ev){
     ev.preventDefault();
     $.post($(this).attr('action'), $(this).serialize());
+    $(this).get(0).reset();
   });
   
   Nodestream(new io.Socket().connect());

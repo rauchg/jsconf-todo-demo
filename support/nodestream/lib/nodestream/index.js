@@ -33,7 +33,7 @@ function paint(type, filename, index, local, obj, sessionId){
   var oldSubscribe = req.subscribe;
   // do not resubscribe to append
   req.subscribe = function(file, blockIndex, append, repaint, remove, local){
-    oldSubscribe.call(req, file, blockIndex, '', repaint, remove, local);
+    return oldSubscribe.call(req, file, blockIndex, '', repaint, remove, local);
   };
   return fileBlocks[filename][index][type].call(req, locals);
 };
@@ -73,15 +73,19 @@ Nodestream.prototype._handle = function(client, message){
   if (message.subscribe){
     // lookup pending subscriptions by hash
     var subscription = pendingSubscriptions[message.subscribe];
-
-    if (subscription[2] && subscription[2].length > 1)
-      subscribe(client, message.subscribe, subscription[2], 'append', subscription[0], subscription[1], subscription[5], subscription[6]);
-    if (subscription[3] && subscription[3].length > 1)
-      subscribe(client, message.subscribe, subscription[3], 'repaint', subscription[0], subscription[1], subscription[5], subscription[6]);
-    if (subscription[4] && subscription[4].length > 1)
-      subscribe(client, message.subscribe, subscription[4], 'remove', subscription[0], subscription[1], null, subscription[6]);
     
-    delete pendingSubscriptions[message.subscribe];
+    if (subscription){
+      if (subscription[2] && subscription[2].length > 1)
+        subscribe(client, message.subscribe, subscription[2], 'append', subscription[0], subscription[1], subscription[5], subscription[6]);
+      if (subscription[3] && subscription[3].length > 1)
+        subscribe(client, message.subscribe, subscription[3], 'repaint', subscription[0], subscription[1], subscription[5], subscription[6]);
+      if (subscription[4] && subscription[4].length > 1)
+        subscribe(client, message.subscribe, subscription[4], 'remove', subscription[0], subscription[1], null, subscription[6]);
+
+      delete pendingSubscriptions[message.subscribe];
+    } else {
+      console.error('cant find subscription by encoded id ' + message.subscribe);
+    }
   }
 };
 
