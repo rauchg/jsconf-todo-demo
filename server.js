@@ -3,7 +3,8 @@ var express = require('express'),
     mongoose = require('mongoose').Mongoose,
     db = mongoose.connect('mongodb://localhost/todo'),
     io = require('socket.io'),
-    node = require('nodestream');
+    node = require('nodestream'),
+    connections = 0;
 
 // model
 mongoose.model('Item', {
@@ -38,7 +39,7 @@ app.configure(function(){
 app.get('/', function(req, res){
   
   Item.find({}).sort([['_id', -1]]).all(function(items){
-    res.render('index.jade', {locals: {items: items}, layout: false});
+    res.render('index.jade', {locals: {items: items, connections: connections}, layout: false});
   });
   
 });
@@ -89,4 +90,12 @@ app.get('/delete/:id', function(req, res){
 
 app.listen(80);
 
-nodestream = io.listen(app).nodestream();
+var nodestream = io.listen(app).nodestream()
+  .on('connect', function(){
+    connections++;
+    this.emit('connections', connections);
+  })
+  .on('disconnect', function(){
+    connections--;
+    this.emit('connections', connections);
+  });

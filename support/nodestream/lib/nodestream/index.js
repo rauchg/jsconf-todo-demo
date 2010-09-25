@@ -4,6 +4,8 @@ var pendingSubscriptions = {},
     subscriptions = {},
     fileBlocks = {};
 
+var sys = require('sys');
+
 // socket.io additions
 
 function subscribe(client, nodeid, ev, type, file, blockIndex, local, sessionId){
@@ -54,8 +56,11 @@ var Nodestream = function(socket){
   socket.on('connection', function(c){
     c.on('message', function(msg){
       if (typeof msg == 'object' && 'nodestream' in msg){
-        c._nodestream = true;
         self._handle(c, msg);
+        if (!c._nodestream){
+          self._emit('connect', c);
+          c._nodestream = true;
+        }
       }
     });
     c.on('disconnect', function(){
@@ -65,6 +70,10 @@ var Nodestream = function(socket){
     });
   });
 };
+
+sys.inherits(Nodestream, process.EventEmitter);
+
+Nodestream.prototype._emit = Nodestream.prototype.emit;
 
 Nodestream.prototype._handle = function(client, message){
   if (!('_nodestreamCleanup' in client)) client._nodestreamCleanup = {};
@@ -93,10 +102,11 @@ Nodestream.prototype._end = function(client){
   for (var ev in client._nodestreamCleanup){
     (function(ev){
       client._nodestreamCleanup[ev].forEach(function(i){
-        subscriptions[ev].splice(i, 1);
+        subscriptions[ev][i] = null;
       });
     })(ev);
   }
+  this._emit('disconnect', client);
 };
 
 Nodestream.prototype.emit = function(ev, obj){
@@ -104,7 +114,8 @@ Nodestream.prototype.emit = function(ev, obj){
   var socket = this.socket;
   if (ev in subscriptions){
     subscriptions[ev].forEach(function(s){
-      if (s.clientId in socket.clients){
+      if (!s) return;
+      if (socket.clients[s.clientId]){
         var args = {id: s.nodeId};
         
         if (s.type == 'repaint' || s.type == 'append'){
@@ -230,7 +241,11 @@ filters.realtime = function(block, compiler, attrs){
   
   fileBlocks[filename].push(compiled);
   
-  compiler.visit(bl);
+  if (attrs.append){
+    compiler.visit(bl);
+  } else {
+    compiler.visit(block);
+  }
 };
 
 function attrs(obj){

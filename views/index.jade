@@ -9,6 +9,12 @@ html
   body
     #wrap
       h1 Welcome to my TODO list
+      :realtime(repaint: 'connections', local: 'connections')
+        .connections
+          - if (connections > 1)
+            p #{connections} people are editing right now
+          - else
+            p You're all alone, loser
       .add
         .wrap
           form.ajax(method: 'post', action: '/add')
