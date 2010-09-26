@@ -12,4 +12,4 @@
 	url = git://github.com/visionmedia/jade.git
 [submodule "support/nodestream"]
 	path = support/nodestream
-	url = git@github.com:LearnBoost/nodestream.git
+	url = git://github.com/LearnBoost/nodestream.git
