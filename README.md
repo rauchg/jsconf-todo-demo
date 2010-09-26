@@ -36,12 +36,12 @@ Two areas are made realtime (a counter of active users and the todo list itself)
 1. Install MongoDB 
 2. Clone the repository (recursively!)
 
-	git clone git://github.com/guille/jsconf-todo-demo.git --recursive
+	git clone git://github.com/guille/jsconf-todo-demo.git --recursive todo
 
 3. Run it
 
-	cd jsconf-todo-demo
-	sudo node run.js
+	cd todo
+	sudo node server.js
 
 And point your browser to `http://localhost`
 
