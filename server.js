@@ -99,3 +99,7 @@ var nodestream = io.listen(app).nodestream()
     connections--;
     this.emit('connections', connections);
   });
+  
+process.on('uncaughtException', function(e){
+  console.error(e.stack || e);
+});
