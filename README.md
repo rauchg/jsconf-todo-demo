@@ -3,7 +3,7 @@ JSConf.eu Socket.IO+Nodestream TODO Application Demo
 
 ## Introduction
 
-This application was written for my JSConf.eu 2010 presentation. 
+This application was written for my JSConf.eu 2010 presentation
 
 Up until [6da2576](https://github.com/guille/jsconf-todo-demo/tree/6da25769f2fcb4d5c0d88d5f558b6dc998a2cecc) it's a simple application powered by:
 
