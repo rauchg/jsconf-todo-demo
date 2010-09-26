@@ -44,8 +44,9 @@ app.get('/', function(req, res){
 });
 
 app.get('/edit/:id', function(req, res){
-  
+
   Item.findById(req.param('id'), function(item){
+    if (!item) return res.send(404);
     res.render('edit.jade', {locals: {item: item}, layout: false});
   });
   
@@ -54,6 +55,7 @@ app.get('/edit/:id', function(req, res){
 app.post('/edit/:id', function(req, res){
   
   Item.findById(req.param('id'), function(item){
+    if (!item) return res.send(404);
     item.title = req.body.title;
     item.due = req.body.due;
     item.description = req.body.description;
@@ -79,6 +81,7 @@ app.post('/add', function(req, res){
 app.get('/delete/:id', function(req, res){
   
   Item.findById(req.param('id'), function(item){
+    if (!item) return res.send(404);
     item.remove(function(){
       nodestream.emit('item.remove.' + item.id);
       res.send(200);

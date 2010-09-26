@@ -26,7 +26,7 @@
     $(this).parent('.item-edit').css('display', 'none');
   });
   
-  $('a.ajax').live('click', function(ev){
+  $('a.ajax').live('click touchstart', function(ev){
     ev.preventDefault();
     $.get($(this).attr('href'));
   });
